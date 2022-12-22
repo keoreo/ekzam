@@ -1,0 +1,350 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище Ekzam_gusModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Executor">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ManagerID" Type="int" Nullable="false" />
+          <Property Name="Grade" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Manager">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="JuniorMinimum" Type="int" Nullable="false" />
+          <Property Name="MiddleMinimum" Type="int" Nullable="false" />
+          <Property Name="SeniorMinimum" Type="int" Nullable="false" />
+          <Property Name="AnalysisCoefficient" Type="float" Nullable="false" />
+          <Property Name="InstallationCoefficient" Type="float" Nullable="false" />
+          <Property Name="SupportCoefficient" Type="float" Nullable="false" />
+          <Property Name="TimeCoefficient" Type="float" Nullable="false" />
+          <Property Name="DifficultyCoefficient" Type="float" Nullable="false" />
+          <Property Name="ToMoneyCoefficient" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Task">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ExecutorID" Type="int" Nullable="false" />
+          <Property Name="Title" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Description" Type="text" />
+          <Property Name="CreateDateTime" Type="datetime" Nullable="false" />
+          <Property Name="Deadline" Type="date" Nullable="false" />
+          <Property Name="Difficulty" Type="float" Nullable="false" />
+          <Property Name="Time" Type="int" Nullable="false" />
+          <Property Name="Status" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="WorkType" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="CompletedDateTime" Type="datetime" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Password" Type="varchar(max)" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="MiddleName" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="LastName" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Login" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="executors_fk0">
+          <End Role="Manager" Type="Self.Manager" Multiplicity="1" />
+          <End Role="Executor" Type="Self.Executor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Manager">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Executor">
+              <PropertyRef Name="ManagerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Executor_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Executor" Type="Self.Executor" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Executor">
+              <PropertyRef Name="ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Manager_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Manager" Type="Self.Manager" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Manager">
+              <PropertyRef Name="ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="tasks_fk0">
+          <End Role="Executor" Type="Self.Executor" Multiplicity="1" />
+          <End Role="Task" Type="Self.Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Executor">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Task">
+              <PropertyRef Name="ExecutorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище Ekzam_gusModelContainer">
+          <EntitySet Name="Executor" EntityType="Self.Executor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Manager" EntityType="Self.Manager" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Task" EntityType="Self.Task" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="executors_fk0" Association="Self.executors_fk0">
+            <End Role="Manager" EntitySet="Manager" />
+            <End Role="Executor" EntitySet="Executor" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Executor_User" Association="Self.FK_Executor_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Executor" EntitySet="Executor" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Manager_User" Association="Self.FK_Manager_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Manager" EntitySet="Manager" />
+          </AssociationSet>
+          <AssociationSet Name="tasks_fk0" Association="Self.tasks_fk0">
+            <End Role="Executor" EntitySet="Executor" />
+            <End Role="Task" EntitySet="Task" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Ekzam_gusModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Executor">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="ManagerID" Type="Int32" Nullable="false" />
+          <Property Name="Grade" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Manager" Relationship="Self.executors_fk0" FromRole="Executor" ToRole="Manager" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Executor_User" FromRole="Executor" ToRole="User" />
+          <NavigationProperty Name="Task" Relationship="Self.tasks_fk0" FromRole="Executor" ToRole="Task" />
+        </EntityType>
+        <EntityType Name="Manager">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="JuniorMinimum" Type="Int32" Nullable="false" />
+          <Property Name="MiddleMinimum" Type="Int32" Nullable="false" />
+          <Property Name="SeniorMinimum" Type="Int32" Nullable="false" />
+          <Property Name="AnalysisCoefficient" Type="Double" Nullable="false" />
+          <Property Name="InstallationCoefficient" Type="Double" Nullable="false" />
+          <Property Name="SupportCoefficient" Type="Double" Nullable="false" />
+          <Property Name="TimeCoefficient" Type="Double" Nullable="false" />
+          <Property Name="DifficultyCoefficient" Type="Double" Nullable="false" />
+          <Property Name="ToMoneyCoefficient" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Executor" Relationship="Self.executors_fk0" FromRole="Manager" ToRole="Executor" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Manager_User" FromRole="Manager" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Task">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ExecutorID" Type="Int32" Nullable="false" />
+          <Property Name="Title" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Deadline" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Difficulty" Type="Double" Nullable="false" />
+          <Property Name="Time" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="WorkType" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CompletedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Executor" Relationship="Self.tasks_fk0" FromRole="Task" ToRole="Executor" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MiddleName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Login" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Executor" Relationship="Self.FK_Executor_User" FromRole="User" ToRole="Executor" />
+          <NavigationProperty Name="Manager" Relationship="Self.FK_Manager_User" FromRole="User" ToRole="Manager" />
+        </EntityType>
+        <Association Name="executors_fk0">
+          <End Role="Manager" Type="Self.Manager" Multiplicity="1" />
+          <End Role="Executor" Type="Self.Executor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Manager">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Executor">
+              <PropertyRef Name="ManagerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Executor_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Executor" Type="Self.Executor" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Executor">
+              <PropertyRef Name="ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="tasks_fk0">
+          <End Role="Executor" Type="Self.Executor" Multiplicity="1" />
+          <End Role="Task" Type="Self.Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Executor">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Task">
+              <PropertyRef Name="ExecutorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Manager_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Manager" Type="Self.Manager" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Manager">
+              <PropertyRef Name="ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Ekzam_gusEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Executor" EntityType="Self.Executor" />
+          <EntitySet Name="Manager" EntityType="Self.Manager" />
+          <EntitySet Name="Task" EntityType="Self.Task" />
+          <EntitySet Name="User" EntityType="Self.User" />
+          <AssociationSet Name="executors_fk0" Association="Self.executors_fk0">
+            <End Role="Manager" EntitySet="Manager" />
+            <End Role="Executor" EntitySet="Executor" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Executor_User" Association="Self.FK_Executor_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Executor" EntitySet="Executor" />
+          </AssociationSet>
+          <AssociationSet Name="tasks_fk0" Association="Self.tasks_fk0">
+            <End Role="Executor" EntitySet="Executor" />
+            <End Role="Task" EntitySet="Task" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Manager_User" Association="Self.FK_Manager_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Manager" EntitySet="Manager" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище Ekzam_gusModelContainer" CdmEntityContainer="Ekzam_gusEntities">
+          <EntitySetMapping Name="Executor">
+            <EntityTypeMapping TypeName="Ekzam_gusModel.Executor">
+              <MappingFragment StoreEntitySet="Executor">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ManagerID" ColumnName="ManagerID" />
+                <ScalarProperty Name="Grade" ColumnName="Grade" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Manager">
+            <EntityTypeMapping TypeName="Ekzam_gusModel.Manager">
+              <MappingFragment StoreEntitySet="Manager">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="JuniorMinimum" ColumnName="JuniorMinimum" />
+                <ScalarProperty Name="MiddleMinimum" ColumnName="MiddleMinimum" />
+                <ScalarProperty Name="SeniorMinimum" ColumnName="SeniorMinimum" />
+                <ScalarProperty Name="AnalysisCoefficient" ColumnName="AnalysisCoefficient" />
+                <ScalarProperty Name="InstallationCoefficient" ColumnName="InstallationCoefficient" />
+                <ScalarProperty Name="SupportCoefficient" ColumnName="SupportCoefficient" />
+                <ScalarProperty Name="TimeCoefficient" ColumnName="TimeCoefficient" />
+                <ScalarProperty Name="DifficultyCoefficient" ColumnName="DifficultyCoefficient" />
+                <ScalarProperty Name="ToMoneyCoefficient" ColumnName="ToMoneyCoefficient" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Task">
+            <EntityTypeMapping TypeName="Ekzam_gusModel.Task">
+              <MappingFragment StoreEntitySet="Task">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ExecutorID" ColumnName="ExecutorID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="CreateDateTime" ColumnName="CreateDateTime" />
+                <ScalarProperty Name="Deadline" ColumnName="Deadline" />
+                <ScalarProperty Name="Difficulty" ColumnName="Difficulty" />
+                <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="WorkType" ColumnName="WorkType" />
+                <ScalarProperty Name="CompletedDateTime" ColumnName="CompletedDateTime" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User">
+            <EntityTypeMapping TypeName="Ekzam_gusModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
